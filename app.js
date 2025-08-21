@@ -10,6 +10,7 @@ const Port = 8000;
 
 // --------- MIDDLEWARE ----------
 app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
