@@ -10,7 +10,10 @@ const Port = 8000;
 
 // --------- MIDDLEWARE ----------
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+// Set views directory for both local and Vercel environments
+const viewsPath = process.env.VERCEL ? path.join(process.cwd(), "views") : path.join(__dirname, "views");
+app.set("views", viewsPath);
+console.log("Views directory set to:", viewsPath);
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
