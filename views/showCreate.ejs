@@ -4,42 +4,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Show Create Hisaab</title>
+    <title>Create New Hisaab - HisaabBook</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --border: #475569;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --input-bg: #1e293b;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --border: #e2e8f0;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --input-bg: #ffffff;
+        }
+
+        * {
+            transition: all 0.3s ease;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .theme-toggle {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .form-input {
+            background: var(--input-bg);
+            border: 2px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        .form-input:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-secondary);
+        }
+    </style>
 </head>
 
-<body class="bg-gray-800 w-screen h-screen flex justify-center items-center">
-    <div class="border border-white w-[80%] h-[80%] ">
-  <div class="NAVBAR h-[10%] border border-white flex items-center justify-between">
-            <div class="LNAV text-white px-4">
-                    <p>HisaabBook</p>
-            </div>
-            <div class="RNAV text-white flex gap-8 px-4">
-                <a href="/">
-                    <p>Home</p>
-                </a>
-                <a href="/create">
-                    <p>Create Hisaab</p>
-                </a>
-            </div>
-        </div>
-        <div class="MAIN p-4">
-            <div class="text-white text-xl pl-6 pt-6">
-                <h3>Create New Hisaab</h3>
-            </div>
-            <div>
-                <form action="/create" method="post" class="flex flex-col">
-
-                    <input type="text" required placeholder="Shopping , Hisaab , Rashan ..." name="heading"
-                        class="text-white w-[60%] px-6 py-2 h-fit border border-white my-5 rounded-md" />
-                    <textarea placeholder="Enter here..." name="content" required
-                        class="text-white w-[80%] h-60 px-6 py-4 rounded-md border border-white resize-none"></textarea>
-
-                    <button class="border border-white rounded-md p-2 w-fit mt-4 text-white">Create New Hisaab</button>
-                </form>
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-[var(--bg-secondary)] border-b border-[var(--border)] sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-book text-[var(--accent)] text-2xl"></i>
+                    <h1 class="text-xl font-bold text-[var(--text-primary)]">HisaabBook</h1>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="/" class="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                    <a href="/create" class="text-[var(--accent)] font-medium">
+                        <i class="fas fa-plus mr-2"></i>Create New Hisaab
+                    </a>
+                    <button onclick="toggleTheme()" class="theme-toggle p-2 rounded-lg transition-all hover:scale-105">
+                        <i id="theme-icon" class="fas fa-moon text-[var(--text-secondary)]"></i>
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-8">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-12 h-12 bg-[var(--accent)] rounded-lg flex items-center justify-center">
+                    <i class="fas fa-plus text-white text-xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-bold text-[var(--text-primary)]">Create New Hisaab</h2>
+                    <p class="text-[var(--text-secondary)]">Add a new financial record to your hisaab book</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card rounded-xl p-8">
+            <form action="/create" method="post" class="space-y-6">
+                <div>
+                    <label for="heading" class="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                        <i class="fas fa-tag mr-2 text-[var(--accent)]"></i>Hisaab Title
+                    </label>
+                    <input 
+                        type="text" 
+                        id="heading"
+                        name="heading" 
+                        required 
+                        placeholder="e.g., Shopping, Monthly Expenses, Business Transaction..."
+                        class="form-input w-full px-4 py-3 rounded-lg transition-all focus:scale-[1.02]"
+                    />
+                    <p class="text-[var(--text-secondary)] text-sm mt-1">Give your hisaab a descriptive title</p>
+                </div>
+
+                <div>
+                    <label for="content" class="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                        <i class="fas fa-file-alt mr-2 text-[var(--accent)]"></i>Hisaab Details
+                    </label>
+                    <textarea 
+                        id="content"
+                        name="content" 
+                        required
+                        rows="8"
+                        placeholder="Enter detailed information about this hisaab...\n\nYou can include:\n• Item descriptions\n• Amounts and calculations\n• Dates and references\n• Any other relevant details"
+                        class="form-input w-full px-4 py-3 rounded-lg resize-none transition-all focus:scale-[1.02]"
+                    ></textarea>
+                    <p class="text-[var(--text-secondary)] text-sm mt-1">Provide comprehensive details about this financial record</p>
+                </div>
+
+                <div class="flex items-center justify-between pt-6 border-t border-[var(--border)]">
+                    <a href="/" class="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors flex items-center">
+                        <i class="fas fa-arrow-left mr-2"></i>Back to Dashboard
+                    </a>
+                    <div class="flex space-x-4">
+                        <button 
+                            type="reset" 
+                            class="px-6 py-3 border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:bg-[var(--bg-secondary)] transition-all"
+                        >
+                            <i class="fas fa-undo mr-2"></i>Reset
+                        </button>
+                        <button 
+                            type="submit" 
+                            class="btn-primary px-8 py-3 rounded-lg transition-all hover:scale-105 flex items-center"
+                        >
+                            <i class="fas fa-save mr-2"></i>Create Hisaab
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="mt-8 card rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-[var(--text-primary)] mb-4 flex items-center">
+                <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>Tips for Better Hisaab Records
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-[var(--text-secondary)] text-sm">
+                <div class="flex items-start space-x-2">
+                    <i class="fas fa-check text-green-500 mt-1"></i>
+                    <span>Use clear, descriptive titles for easy identification</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                    <i class="fas fa-check text-green-500 mt-1"></i>
+                    <span>Include dates, amounts, and reference numbers</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                    <i class="fas fa-check text-green-500 mt-1"></i>
+                    <span>Add context and purpose for future reference</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                    <i class="fas fa-check text-green-500 mt-1"></i>
+                    <span>Keep records organized and up-to-date</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                themeIcon.className = 'fas fa-moon text-[var(--text-secondary)]';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                themeIcon.className = 'fas fa-sun text-[var(--text-secondary)]';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                themeIcon.className = 'fas fa-sun text-[var(--text-secondary)]';
+            }
+        });
+
+        // Auto-resize textarea
+        const textarea = document.getElementById('content');
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+    </script>
 </body>
 
 </html>

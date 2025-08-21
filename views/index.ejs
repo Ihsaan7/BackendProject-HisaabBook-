@@ -4,54 +4,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main_Page</title>
+    <title>HisaabBook - Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --border: #475569;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --border: #e2e8f0;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            transition: all 0.3s ease;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--shadow);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .theme-toggle {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+        }
+    </style>
 </head>
 
-<body class="bg-gray-800 w-screen h-screen flex justify-center items-center">
-    <div class="border border-white w-[80%] h-[80%] ">
-        <div class="NAVBAR h-[10%] border border-white flex items-center justify-between">
-            <div class="LNAV text-white px-4">
-                <p>HisaabBook</p>
-            </div>
-            <div class="RNAV text-white flex gap-8 px-4">
-                <a href="/">
-                    <p>Home</p>
-                </a>
-                <a href="/create">
-                    <p>Create Hisaab</p>
-                </a>
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-[var(--bg-secondary)] border-b border-[var(--border)] sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-book text-[var(--accent)] text-2xl"></i>
+                    <h1 class="text-xl font-bold text-[var(--text-primary)]">HisaabBook</h1>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="/" class="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                    <a href="/create" class="btn-primary px-4 py-2 rounded-lg transition-all hover:scale-105">
+                        <i class="fas fa-plus mr-2"></i>Create New Hisaab
+                    </a>
+                    <button onclick="toggleTheme()" class="theme-toggle p-2 rounded-lg transition-all hover:scale-105">
+                        <i id="theme-icon" class="fas fa-moon text-[var(--text-secondary)]"></i>
+                    </button>
+                </div>
             </div>
         </div>
-        <div class="MAIN p-4 h-full ">
-            <div class="text-white text-xl pl-6 pt-6">
-                <h3>All Hisaab Here</h3>
-            </div>
-            <div class="mt-5 flex flex-col gap-2 h-fit">
-                <% listArray.forEach(items=> { %>
-                    <div class="flex justify-between p-3 w-[60%] h-20 border border-white text-white ">
-                        <div class="flex gap-2">
-                            <h4 class="">
-                                <%= items.now %>
-                            </h4>
-                            <a href="/hisaab/<%= items.id %>/<%= items.now %>">
-                                <p>✅</p>
-                            </a>
-                        </div>
-                        <div class="flex gap-5">
-                            <a href="/edit/<%= items.id %>/<%= items.now %>">
-                                <p>🛠️</p>
-                            </a>
-                            <form action="/del/<%= items.id %>" method="POST" style="display:inline;">
-                                <button type="submit">🚫</button>
-                            </form>
+    </nav>
 
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-[var(--text-primary)] mb-2">All Hisaab Records</h2>
+            <p class="text-[var(--text-secondary)]">Manage your financial records efficiently</p>
+        </div>
+
+        <% if (listArray.length === 0) { %>
+            <div class="text-center py-16">
+                <i class="fas fa-file-invoice text-6xl text-[var(--text-secondary)] mb-4"></i>
+                <h3 class="text-xl font-semibold text-[var(--text-primary)] mb-2">No Hisaab Records Found</h3>
+                <p class="text-[var(--text-secondary)] mb-6">Start by creating your first hisaab record</p>
+                <a href="/create" class="btn-primary px-6 py-3 rounded-lg inline-flex items-center transition-all hover:scale-105">
+                    <i class="fas fa-plus mr-2"></i>Create Your First Hisaab
+                </a>
+            </div>
+        <% } else { %>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <% listArray.forEach(items => { %>
+                    <div class="card rounded-xl p-6 transition-all">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-[var(--accent)] rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-calendar-alt text-white"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-[var(--text-primary)] text-lg"><%= items.now %></h3>
+                                    <p class="text-[var(--text-secondary)] text-sm">Hisaab Record</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <p class="text-[var(--text-secondary)] text-sm line-clamp-3"><%= items.content.substring(0, 100) %>...</p>
+                        </div>
+                        
+                        <div class="flex justify-between items-center pt-4 border-t border-[var(--border)]">
+                            <a href="/hisaab/<%= items.id %>/<%= items.now %>" 
+                               class="text-[var(--accent)] hover:text-[var(--accent-hover)] transition-colors flex items-center">
+                                <i class="fas fa-eye mr-2"></i>View
+                            </a>
+                            <div class="flex space-x-3">
+                                <a href="/edit/<%= items.id %>/<%= items.now %>" 
+                                   class="text-green-500 hover:text-green-600 transition-colors" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form action="/del/<%= items.id %>" method="POST" class="inline" 
+                                      onsubmit="return confirm('Are you sure you want to delete this hisaab?')">
+                                    <button type="submit" 
+                                            class="text-red-500 hover:text-red-600 transition-colors" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                    <% }) %>
+                <% }) %>
             </div>
-        </div>
-    </div>
+        <% } %>
+    </main>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                themeIcon.className = 'fas fa-moon text-[var(--text-secondary)]';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                themeIcon.className = 'fas fa-sun text-[var(--text-secondary)]';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                themeIcon.className = 'fas fa-sun text-[var(--text-secondary)]';
+            }
+        });
+    </script>
 </body>
 
 </html>

@@ -1,44 +1,330 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hisaab ShowCase</title>
+    <title>Edit Hisaab - HisaabBook</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-</head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --border: #475569;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --input-bg: #1e293b;
+            --input-border: #475569;
+        }
 
-<body class="bg-gray-800 w-screen h-screen flex justify-center items-center">
-    <div class="border border-white w-[80%] h-[80%] ">
-        <div class="NAVBAR h-[10%] border border-white flex items-center justify-between">
-            <div class="LNAV text-white px-4">
-                    <p>HisaabBook</p>
-            </div>
-            <div class="RNAV text-white flex gap-8 px-4">
-                <a href="/">
-                    <p>Home</p>
-                </a>
-                <a href="/create">
-                    <p>Create Hisaab</p>
-                </a>
+        [data-theme="light"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --border: #e2e8f0;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --input-bg: #ffffff;
+            --input-border: #d1d5db;
+        }
+
+        * {
+            transition: all 0.3s ease;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .theme-toggle {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .form-input {
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
+            color: var(--text-primary);
+        }
+
+        .form-input:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .character-count {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-[var(--bg-secondary)] border-b border-[var(--border)] sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-book text-[var(--accent)] text-2xl"></i>
+                    <h1 class="text-xl font-bold text-[var(--text-primary)]">HisaabBook</h1>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="/" class="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                    <a href="/create" class="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">
+                        <i class="fas fa-plus mr-2"></i>Create Hisaab
+                    </a>
+                    <button onclick="toggleTheme()" class="theme-toggle p-2 rounded-lg transition-all hover:scale-105">
+                        <i id="theme-icon" class="fas fa-moon text-[var(--text-secondary)]"></i>
+                    </button>
+                </div>
             </div>
         </div>
-        <div class="w-full h-full mt-10 px-5">
-            <div class="w-full h-fit mb-5">
+    </nav>
 
-                <h3 class="text-blue-400 font-bold">You're editing hisaab of Date: <%= now %>
-                </h3>
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header Section -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-[var(--accent)] rounded-lg flex items-center justify-center">
+                        <i class="fas fa-edit text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-3xl font-bold text-[var(--text-primary)]">Edit Hisaab</h2>
+                        <p class="text-[var(--text-secondary)]">Modify your financial record from <%= now %></p>
+                    </div>
+                </div>
+                <div class="flex space-x-3">
+                    <a href="/hisaab/<%= id %>/<%= now %>" class="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors flex items-center">
+                        <i class="fas fa-arrow-left mr-2"></i>Back to Details
+                    </a>
+                </div>
             </div>
-            <div class="w-[50%] h-50 "> 
-                <form method="post" action="/edit/<%= id %>" class="flex flex-col">
-                    <textarea class="text-black bg-gray-200 resize-none rounded-md p-2 text-left    align-top"
-                        name="fileContent" rows="8" cols="50"><%= content %>
-                    </textarea>
-                    <button class="border border-white  rounded-md p-2 w-fit mt-4 text-white">Save Hisaab</button>
-                </form>
+
+            <!-- Date Badge -->
+            <div class="inline-flex items-center px-4 py-2 bg-[var(--accent)] text-white rounded-full text-sm font-medium">
+                <i class="fas fa-calendar-alt mr-2"></i>
+                Editing Record: <%= now %>
+            </div>
+        </div>
+
+        <!-- Edit Form -->
+        <div class="card rounded-xl p-8">
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold text-[var(--text-primary)] mb-2 flex items-center">
+                    <i class="fas fa-file-edit text-[var(--accent)] mr-3"></i>
+                    Edit Content
+                </h3>
+                <p class="text-[var(--text-secondary)] text-sm">Make changes to your hisaab content below</p>
+            </div>
+
+            <form action="/edit/<%= id %>" method="post" class="space-y-6">
+                <div>
+                    <label for="content" class="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                        <i class="fas fa-file-alt mr-2"></i>Hisaab Content
+                    </label>
+                    <textarea 
+                        id="content"
+                        name="fileContent" 
+                        rows="12"
+                        class="form-input w-full p-4 rounded-lg resize-y min-h-[300px]" 
+                        placeholder="Enter your hisaab content here..."
+                        oninput="updateCharacterCount()"
+                        required><%= content %></textarea>
+                    <div class="flex justify-between items-center mt-2">
+                        <div class="character-count">
+                            <span id="char-count"><%= content.length %></span> characters
+                        </div>
+                        <div class="text-xs text-[var(--text-secondary)]">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Use line breaks to organize your content
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap gap-4 pt-4 border-t border-[var(--border)]">
+                    <button type="submit" class="btn-primary px-8 py-3 rounded-lg transition-all hover:scale-105 flex items-center">
+                        <i class="fas fa-save mr-2"></i>Save Hisaab
+                    </button>
+                    <a href="/" 
+                       class="px-8 py-3 border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:bg-[var(--bg-secondary)] transition-all flex items-center">
+                        <i class="fas fa-times mr-2"></i>Cancel
+                    </a>
+                    <button type="button" onclick="previewContent()" 
+                            class="px-8 py-3 border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:bg-[var(--bg-secondary)] transition-all flex items-center">
+                        <i class="fas fa-eye mr-2"></i>Preview
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="mt-8 card rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-[var(--text-primary)] mb-4 flex items-center">
+                <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                Editing Tips
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-[var(--text-secondary)]">
+                <div class="flex items-start space-x-2">
+                    <i class="fas fa-check text-green-500 mt-1"></i>
+                    <span>Use clear and descriptive language for better record keeping</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                    <i class="fas fa-check text-green-500 mt-1"></i>
+                    <span>Include dates, amounts, and transaction details</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                    <i class="fas fa-check text-green-500 mt-1"></i>
+                    <span>Organize content with line breaks for readability</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                    <i class="fas fa-check text-green-500 mt-1"></i>
+                    <span>Save frequently to avoid losing your changes</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Record Info -->
+        <div class="mt-8 card rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-[var(--text-primary)] mb-4 flex items-center">
+                <i class="fas fa-info-circle text-[var(--accent)] mr-2"></i>
+                Record Information
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-hashtag text-[var(--text-secondary)]"></i>
+                    <span class="text-[var(--text-secondary)]">ID:</span>
+                    <span class="text-[var(--text-primary)] font-mono"><%= id %></span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-clock text-[var(--text-secondary)]"></i>
+                    <span class="text-[var(--text-secondary)]">Created:</span>
+                    <span class="text-[var(--text-primary)]"><%= now %></span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-edit text-[var(--text-secondary)]"></i>
+                    <span class="text-[var(--text-secondary)]">Status:</span>
+                    <span class="text-yellow-500 font-medium">Editing</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Preview Modal -->
+    <div id="preview-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="card rounded-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold text-[var(--text-primary)] flex items-center">
+                        <i class="fas fa-eye text-[var(--accent)] mr-2"></i>
+                        Content Preview
+                    </h3>
+                    <button onclick="closePreview()" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div id="preview-content" class="bg-[var(--input-bg)] border border-[var(--border)] rounded-lg p-4 text-[var(--text-primary)] whitespace-pre-wrap">
+                </div>
             </div>
         </div>
     </div>
-</body>
 
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                themeIcon.className = 'fas fa-moon text-[var(--text-secondary)]';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                themeIcon.className = 'fas fa-sun text-[var(--text-secondary)]';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                themeIcon.className = 'fas fa-sun text-[var(--text-secondary)]';
+            }
+        });
+
+        function updateCharacterCount() {
+            const textarea = document.getElementById('content');
+            const charCount = document.getElementById('char-count');
+            charCount.textContent = textarea.value.length;
+        }
+
+        function previewContent() {
+            const content = document.getElementById('content').value;
+            const previewContent = document.getElementById('preview-content');
+            const modal = document.getElementById('preview-modal');
+            
+            previewContent.textContent = content || 'No content to preview';
+            modal.classList.remove('hidden');
+        }
+
+        function closePreview() {
+            const modal = document.getElementById('preview-modal');
+            modal.classList.add('hidden');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('preview-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePreview();
+            }
+        });
+
+        // Auto-save functionality (optional)
+        let autoSaveTimeout;
+        document.getElementById('content').addEventListener('input', function() {
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(() => {
+                // You can implement auto-save here if needed
+                console.log('Auto-save triggered');
+            }, 5000); // Auto-save after 5 seconds of inactivity
+        });
+    </script>
+</body>
 </html>

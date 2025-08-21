@@ -1,15 +1,19 @@
 {
   "name": "hisaabbook",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A modern personal finance tracker with dark/light theme support",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx nodemon app.js"
+    "start": "node app.js",
+    "dev": "npx nodemon app.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["finance", "tracker", "expenses", "nodejs", "express"],
+  "author": "Your Name",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "dependencies": {
     "connect-flash": "^0.1.1",
     "ejs": "^3.1.10",
