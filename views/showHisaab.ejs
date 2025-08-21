@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hisaab ShowCase</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-800 w-screen h-screen flex justify-center items-center">
+    <div class="border border-white w-[80%] h-[80%] ">
+   <div class="NAVBAR h-[10%] border border-white flex items-center justify-between">
+            <div class="LNAV text-white px-4">
+                    <p>HisaabBook</p>
+            </div>
+            <div class="RNAV text-white flex gap-8 px-4">
+                <a href="/">
+                    <p>Home</p>
+                </a>
+                <a href="/create">
+                    <p>Create Hisaab</p>
+                </a>
+            </div>
+        </div>
+        <div class="w-full h-full mt-10 px-5">
+            <div class="w-full h-fit mb-5">
+                <h3 class="text-blue-400 font-bold">You're Seeing hisaab of Date: <%= now %></h3>
+            </div>
+            <div class="w-[70%] h-50 p-3 rounded-md bg-gray-200">
+                <p class="text-gray-900"> <%= content %></p>
+            </div>
+        <a href="/edit/<%= id %>/<%= now %>"><button class="border border-white rounded-md p-2 w-fit mt-4 text-white">Update Hisaab</button></a>
+        </div>
+    </div>
+</body>
+</html>
