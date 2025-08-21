@@ -11,9 +11,17 @@ const Port = 8000;
 // --------- MIDDLEWARE ----------
 app.set("view engine", "ejs");
 // Set views directory for both local and Vercel environments
-const viewsPath = process.env.VERCEL ? path.join(process.cwd(), "views") : path.join(__dirname, "views");
+let viewsPath;
+if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+  // For serverless environments (Vercel, AWS Lambda)
+  viewsPath = path.join(process.cwd(), "views");
+} else {
+  // For local development
+  viewsPath = path.join(__dirname, "views");
+}
 app.set("views", viewsPath);
 console.log("Views directory set to:", viewsPath);
+console.log("Directory exists:", require('fs').existsSync(viewsPath));
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
